@@ -1,0 +1,60 @@
+<div class="results-container">
+  <mat-card class="results-card">
+    <mat-card-header>
+      <mat-card-title>Quiz Results</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="score-section">
+        <div class="score-circle" [class]="'score-' + getScoreColor()">
+          <div class="score-value">{{ score }}%</div>
+          <div class="score-label">Score</div>
+        </div>
+        <h2 class="score-message">{{ getScoreMessage() }}</h2>
+      </div>
+
+      <div class="stats-section">
+        <div class="stat-item">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <div class="stat-content">
+            <div class="stat-value">{{ correct }}</div>
+            <div class="stat-label">Correct Answers</div>
+          </div>
+        </div>
+        <div class="stat-item">
+          <mat-icon color="warn">cancel</mat-icon>
+          <div class="stat-content">
+            <div class="stat-value">{{ total - correct }}</div>
+            <div class="stat-label">Incorrect Answers</div>
+          </div>
+        </div>
+        <div class="stat-item">
+          <mat-icon>quiz</mat-icon>
+          <div class="stat-content">
+            <div class="stat-value">{{ total }}</div>
+            <div class="stat-label">Total Questions</div>
+          </div>
+        </div>
+      </div>
+
+      <mat-progress-bar 
+        mode="determinate" 
+        [value]="score"
+        [color]="getScoreColor()"
+        class="score-bar"
+      ></mat-progress-bar>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="goToQuizzes()">
+          <mat-icon>list</mat-icon>
+          Back to Quizzes
+        </button>
+        <button mat-raised-button (click)="retakeQuiz()">
+          <mat-icon>refresh</mat-icon>
+          Retake Quiz
+        </button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>
+

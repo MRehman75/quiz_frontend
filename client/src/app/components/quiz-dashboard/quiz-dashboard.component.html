@@ -1,0 +1,89 @@
+<div class="dashboard-container">
+  <div class="header-section">
+    <div>
+      <h1>{{ quiz?.title || 'Quiz Dashboard' }}</h1>
+      <button mat-icon-button (click)="loadAnalytics()" title="Refresh">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+    <div class="share-section">
+      <mat-form-field appearance="outline">
+        <mat-label>Share Link</mat-label>
+        <input matInput [value]="shareLink" readonly>
+        <button mat-icon-button matSuffix (click)="copyShareLink()" title="Copy link">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading analytics...</p>
+  </div>
+
+  <div *ngIf="!loading && analytics" class="analytics-grid">
+    <!-- Statistics Cards -->
+    <mat-card class="stat-card">
+      <mat-card-header>
+        <mat-card-title>Total Attempts</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-value">{{ analytics.totalAttempts }}</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-header>
+        <mat-card-title>Unique Participants</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-value">{{ analytics.uniqueParticipants }}</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-header>
+        <mat-card-title>Average Score</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-value">{{ analytics.averageScore }}%</div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Attempts List -->
+    <mat-card class="attempts-card">
+      <mat-card-header>
+        <mat-card-title>Recent Attempts</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="analytics.attempts.length === 0" class="empty-state">
+          <p>No attempts yet. Share the link to get started!</p>
+        </div>
+        <table *ngIf="analytics.attempts.length > 0" class="attempts-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Score</th>
+              <th>Percentage</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let attempt of analytics.attempts">
+              <td>{{ attempt.email === 'anonymous' ? 'Anonymous' : attempt.email }}</td>
+              <td>{{ attempt.correct }}/{{ attempt.total }}</td>
+              <td>
+                <span [ngClass]="'score-' + getScoreClass(attempt.percentage)">
+                  {{ attempt.percentage }}%
+                </span>
+              </td>
+              <td>{{ formatDate(attempt.createdAt) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">
+  <mat-icon>quiz</mat-icon>
+  <span class="toolbar-title" (click)="navigateToQuizzes()">{{ title }}</span>
+  <span class="spacer"></span>
+  <button *ngIf="isLoggedIn" mat-button routerLink="/quizzes/new">
+    <mat-icon>add_circle</mat-icon>
+    Create Quiz
+    </button>
+  <button *ngIf="isLoggedIn" mat-button (click)="navigateToQuizzes()">
+    <mat-icon>list</mat-icon>
+    Quizzes
+    </button>
+  <button *ngIf="isLoggedIn" mat-button (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Logout
+    </button>
+</mat-toolbar>
+
+<main class="main-content">
+<router-outlet></router-outlet>
+</main>

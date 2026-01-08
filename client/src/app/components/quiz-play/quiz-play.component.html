@@ -1,0 +1,108 @@
+<div class="quiz-play-container">
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading quiz...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-container">
+    <mat-icon>error</mat-icon>
+    <p>{{ errorMessage }}</p>
+    <button mat-raised-button color="primary" (click)="router.navigate(['/quizzes'])">
+      Back to Quizzes
+    </button>
+  </div>
+
+  <div *ngIf="!loading && !errorMessage && quiz && questions.length > 0" class="quiz-content">
+    <!-- Header -->
+    <div class="quiz-header">
+      <div class="quiz-title-section">
+        <h1>{{ quiz.title }}</h1>
+        <p *ngIf="quiz.description">{{ quiz.description }}</p>
+      </div>
+      <div class="timer-section">
+        <mat-icon>timer</mat-icon>
+        <span class="timer" [class.warning]="timeRemaining < 60">{{ formatTime(timeRemaining) }}</span>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-section">
+      <mat-progress-bar mode="determinate" [value]="getProgress()"></mat-progress-bar>
+      <p class="progress-text">
+        Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}
+      </p>
+    </div>
+
+    <!-- Question Navigation -->
+    <div class="question-nav">
+      <button mat-icon-button (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="question-dots">
+        <button
+          *ngFor="let question of questions; let i = index"
+          mat-mini-fab
+          [color]="isAnswered(i) ? 'primary' : 'basic'"
+          [class.current]="i === currentQuestionIndex"
+          (click)="goToQuestion(i)"
+          [title]="'Question ' + (i + 1)"
+        >
+          {{ i + 1 }}
+        </button>
+      </div>
+      <button mat-icon-button (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1">
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+
+    <!-- Current Question -->
+    <mat-card class="question-card">
+      <mat-card-content>
+        <h2 class="question-text">
+          {{ questions[currentQuestionIndex].text }}
+        </h2>
+        <div class="options-container">
+          <button
+            *ngFor="let option of questions[currentQuestionIndex].options; let i = index"
+            mat-raised-button
+            [class.selected]="selectedAnswers[currentQuestionIndex] === i"
+            [disabled]="submitted"
+            (click)="selectAnswer(i)"
+            class="option-button"
+          >
+            <span class="option-label">{{ getOptionLabel(i) }}.</span>
+            <span class="option-text">{{ option }}</span>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Navigation Buttons -->
+    <div class="action-buttons">
+      <button mat-button (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">
+        <mat-icon>arrow_back</mat-icon>
+        Previous
+      </button>
+      <button
+        *ngIf="currentQuestionIndex < questions.length - 1"
+        mat-raised-button
+        color="primary"
+        (click)="nextQuestion()"
+      >
+        Next
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+      <button
+        *ngIf="currentQuestionIndex === questions.length - 1"
+        mat-raised-button
+        color="accent"
+        (click)="submitQuiz()"
+        [disabled]="submitted"
+      >
+        <mat-icon>check_circle</mat-icon>
+        Submit Quiz
+      </button>
+    </div>
+  </div>
+</div>
+

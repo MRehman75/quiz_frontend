@@ -1,0 +1,86 @@
+<div class="quiz-list-container">
+  <div class="header-section">
+    <div>
+      <h1>Available Quizzes</h1>
+      <p>Test your knowledge or create your own quiz to share.</p>
+    </div>
+    <div class="actions">
+      <button mat-raised-button color="primary" routerLink="/quizzes/new">
+        <mat-icon>add_circle</mat-icon>
+        Create Quiz
+      </button>
+    </div>
+  </div>
+
+  <mat-card class="share-banner" *ngIf="shareLink">
+    <div class="share-text">
+      <mat-icon color="primary">check_circle</mat-icon>
+      <div>
+        <div class="share-title">Quiz created successfully</div>
+        <div class="share-link">{{ shareLink }}</div>
+      </div>
+    </div>
+    <div class="share-actions">
+      <button mat-stroked-button color="primary" (click)="copyCreatedQuizLink()">
+        <mat-icon>content_copy</mat-icon>
+        Copy Link
+      </button>
+    </div>
+  </mat-card>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading quizzes...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-container">
+    <mat-icon>error</mat-icon>
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="!loading && !errorMessage && quizzes.length === 0" class="empty-state">
+    <mat-icon>quiz</mat-icon>
+    <h2>No quizzes available</h2>
+    <p>Check back later for new quizzes!</p>
+  </div>
+
+  <div class="quiz-grid" *ngIf="!loading && quizzes.length > 0">
+    <mat-card class="quiz-card" *ngFor="let quiz of quizzes" (click)="startQuiz(quiz._id)">
+      <mat-card-header>
+        <mat-card-title>{{ quiz.title }}</mat-card-title>
+        <mat-card-subtitle *ngIf="quiz.description">{{ quiz.description }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="quiz-info">
+          <div class="info-item" *ngIf="quiz.createdAt">
+            <mat-icon>calendar_today</mat-icon>
+            <span>{{ formatDate(quiz.createdAt) }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <div class="card-actions-row">
+          <button mat-raised-button color="primary" class="start-button" (click)="startQuiz(quiz._id); $event.stopPropagation()">
+            <mat-icon>play_arrow</mat-icon>
+            Start Quiz
+          </button>
+          <div class="action-buttons">
+            <button mat-icon-button color="primary" (click)="viewDashboard(quiz._id, $event)" title="View Dashboard">
+              <mat-icon>dashboard</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" (click)="copyShareLink(quiz._id, $event)" title="Copy Share Link">
+              <mat-icon>share</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" (click)="editQuiz(quiz._id, $event)" title="Edit Quiz">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteQuiz(quiz._id, $event)" title="Delete Quiz">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+

@@ -1,0 +1,46 @@
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  background: linear-gradient(120deg, #5b7bff, #7c4dff);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+.toolbar-title {
+  margin-left: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.2px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.main-content {
+  min-height: calc(100vh - 64px);
+  background: radial-gradient(circle at 20% 20%, #eef2ff 0, #f8fafc 30%, #ffffff 70%);
+  animation: fadeIn 0.4s ease;
+}
+
+button {
+  mat-icon {
+    margin-right: 4px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
